@@ -67,11 +67,11 @@ function _decodeMethod(data) {
   const abiItem = state.methodIDs[methodID];
   if (abiItem) {
     const params = abiItem.inputs.map(function (item) { return item.type; });
-    let decoded = SolidityCoder.decodeParams(params, data.slice(10));
+    var decoded = SolidityCoder.decodeParams(params, data.slice(10));
     return {
       name: abiItem.name,
       params: decoded.map(function (param, index) {
-        let parsedParam = param;
+        var parsedParam = param;
         const isUint = abiItem.inputs[index].type.indexOf("uint") == 0;
         const isInt = abiItem.inputs[index].type.indexOf("int") == 0;
 
@@ -79,7 +79,7 @@ function _decodeMethod(data) {
           const isArray = Array.isArray(param);
 
           if (isArray) {
-            parsedParam = param.map(val => new Web3().toBigNumber(val).toString());
+            parsedParam = param.map(function(val){return new Web3().toBigNumber(val).toString()});
           } else {
             parsedParam = new Web3().toBigNumber(param).toString();
           }
@@ -113,11 +113,11 @@ function _decodeLogs(logs) {
     const method = state.methodIDs[methodID];
     if (method) {
       const logData = logItem.data;
-      let decodedParams = [];
-      let dataIndex = 0;
-      let topicsIndex = 1;
+      var decodedParams = [];
+      var dataIndex = 0;
+      var topicsIndex = 1;
 
-      let dataTypes = [];
+      var dataTypes = [];
       method.inputs.map(
         function (input) {
           if (!input.indexed) {
